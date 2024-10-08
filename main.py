@@ -74,7 +74,7 @@ def main():
     attempts = []
     
 
-    while  turn < 10:
+    while turn < 10:
         print(f"TURN {turn + 1}", "\n")
         display_board(board)
         
