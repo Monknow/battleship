@@ -48,6 +48,8 @@ def display_rows(board, show_ships):
                     print_row.append("o")    
                             
         print(" | ".join(print_row))
+    
+    print("\n")
 
 
 def display_board(board, show_ships = False):
@@ -65,6 +67,28 @@ def display_board(board, show_ships = False):
     print(spacing_string.join(leyend_row))    
     
     display_rows(board, show_ships)
+    
+    
+def get_input(attempts):    
+    attempt_row_string = input("Next row to shoot? ")
+    attempt_column_string = input("Next column to shoot? ")
+    
+    if not (attempt_row_string.isdigit() or attempt_column_string.isdigit()):
+        print("\n", "Input isn't valid", "\n")   
+        return "error"
+        
+    attempt_row = int(attempt_row_string)
+    attempt_column = int(attempt_column_string)
+
+    if not (1 < attempt_row < 8 and 1 < attempt_column < 8):
+        print("\n", "Shoot out of bounds. Try again", "\n")   
+        return "error"
+    
+    if [attempt_row, attempt_column] in attempts:
+        print("\n", "You already shot there", "\n")
+        return "error"
+    
+    return [attempt_row, attempt_column]
 
 
 def main():
@@ -72,18 +96,17 @@ def main():
     board = create_matrix(8,8)
     print(board)
     attempts = []
-    
 
     while turn < 10:
-        print(f"TURN {turn + 1}", "\n")
+        print("\n", f"TURN {turn + 1}", "\n")
         display_board(board)
+        next_attempt = get_input(attempts)
         
-        attempt_row = int(input("Next row to shoot? (1 - 8) "))
-        attempt_column = int(input("Next column to shoot? (1 - 8) "))
-        
-        if [attempt_row, attempt_column] in attempts:
-            print("You already shot there")
+        if next_attempt == "error":
             continue
+        
+        attempt_row = next[0]
+        attempt_column = next[1]
 
         if board[attempt_row - 1][attempt_column - 1] == 0:
             print("You missed!")
