@@ -80,7 +80,7 @@ def get_input(attempts):
     attempt_row = int(attempt_row_string)
     attempt_column = int(attempt_column_string)
 
-    if not (1 < attempt_row < 8 and 1 < attempt_column < 8):
+    if not (1 <= attempt_row <= 8 and 1 <= attempt_column <= 8):
         print("\n", "Shoot out of bounds. Try again", "\n")   
         return "error"
     
@@ -105,8 +105,8 @@ def main():
         if next_attempt == "error":
             continue
         
-        attempt_row = next[0]
-        attempt_column = next[1]
+        attempt_row = next_attempt[0]
+        attempt_column = next_attempt[1]
 
         if board[attempt_row - 1][attempt_column - 1] == 0:
             print("You missed!")
