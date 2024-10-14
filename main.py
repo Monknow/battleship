@@ -73,7 +73,7 @@ def get_input(attempts):
     attempt_row_string = input("Next row to shoot? ")
     attempt_column_string = input("Next column to shoot? ")
     
-    if not (attempt_row_string.isdigit() or attempt_column_string.isdigit()):
+    if not (attempt_row_string.isdigit() and attempt_column_string.isdigit()):
         print("\n", "Input isn't valid", "\n")   
         return "error"
         
@@ -92,37 +92,56 @@ def get_input(attempts):
 
 
 def main():
-    turn = 0
-    board = create_matrix(8,8)
-    print(board)
-    attempts = []
+    while True:
+        turn = 0
+        board = create_matrix(8,8)
+        ships_found = 0
+        attempts = []
+    
+        while turn < 10:
+            print("\n", f"TURN {turn + 1}", "\n")
+            display_board(board)
+            next_attempt = get_input(attempts)
+            
+            if next_attempt == "error":
+                continue
+            
+            attempt_row = next_attempt[0]
+            attempt_column = next_attempt[1]
+    
+            if board[attempt_row - 1][attempt_column - 1] == 0:
+                print("You missed!")
+                board[attempt_row - 1][attempt_column - 1] = 2
+    
+            
+            if board[attempt_row - 1][attempt_column - 1] == 1:
+                print("You hit a ship!")
+                board[attempt_row - 1][attempt_column - 1] = 3
+                ships_found +=1
+            
+            attempts.append([attempt_row, attempt_column])
+            
+            
+            turn += 1
+            
+        # Display board showing where are the ships
+        print('\033[1m'+"This were the ships placements"+'\033[1m')
+        display_board(board, True)   
 
-    while turn < 10:
-        print("\n", f"TURN {turn + 1}", "\n")
-        display_board(board)
-        next_attempt = get_input(attempts)
-        
-        if next_attempt == "error":
+        # Tells how they did in the game, with a percentage and if they won
+        if ships_found == 5:
+            print("Congratulations! You won!")
+        elif 1 <= ships_found < 5:
+            print(f"Hey you fought well, you found {ships_found} ships, meaning you have an accuracy of {ships_found * 20}%.")
+        else:
+            print("You lost the battle")
+
+        # Takes an input and this will allow the user to dicide if they want to keep playing
+        continue_value = input("Do you want to play again? [Y/n]: ")
+        if continue_value.lower() == "y":
             continue
-        
-        attempt_row = next_attempt[0]
-        attempt_column = next_attempt[1]
-
-        if board[attempt_row - 1][attempt_column - 1] == 0:
-            print("You missed!")
-            board[attempt_row - 1][attempt_column - 1] = 2
-
-        
-        if board[attempt_row - 1][attempt_column - 1] == 1:
-            print("You hit a ship!")
-            board[attempt_row - 1][attempt_column - 1] = 3   
-        
-        attempts.append([attempt_row, attempt_column])
-        
-        
-        turn += 1
-        
-    # Display board showing where are the ships   
-    display_board(board, True)   
-
+        else:
+            print("Thanks for playing the game")
+            break
+            
 main()
