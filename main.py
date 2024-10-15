@@ -4,6 +4,7 @@ def create_matrix(rows,columns):
     matrix=[]
     ships = []
     
+    # Randomly get ships position, without repeating them
     while len(ships) < 5:
         position = random.randint(0, rows * columns - 1)
         
@@ -11,7 +12,8 @@ def create_matrix(rows,columns):
             ships.append(position)
                 
     count = 0     
-                
+
+    # Create the matrix, if the inner index is in the ships positions list, then inset a ship            
     for i in range(rows):
         rows=[]
         for j in range(columns):
@@ -27,7 +29,8 @@ def create_matrix(rows,columns):
     return matrix
 
 def display_rows(board, show_ships):
-    # Then we can iterate through the board's matrix. Since we print by row, we add append all the elements by row in a list, and print the row.
+    # Ce can iterate through the board's matrix. Since we print by row, we  append 
+    # all the elements by row in a list, and print the row.
     # Depending on the value on the board, we display a different element on the board.
     for row_number, row in enumerate(board):
         print_row = [str(row_number + 1)]
@@ -73,6 +76,7 @@ def get_input(attempts):
     attempt_row_string = input("Next row to shoot? ")
     attempt_column_string = input("Next column to shoot? ")
     
+    # Check if the attempt is a positive integer
     if not (attempt_row_string.isdigit() and attempt_column_string.isdigit()):
         print("\n", "Input isn't valid", "\n")   
         return "error"
@@ -80,18 +84,21 @@ def get_input(attempts):
     attempt_row = int(attempt_row_string)
     attempt_column = int(attempt_column_string)
 
+    # Check if the integer is within range
     if not (1 <= attempt_row <= 8 and 1 <= attempt_column <= 8):
         print("\n", "Shoot out of bounds. Try again", "\n")   
         return "error"
     
+    # Check if the attempt is duplicated
     if [attempt_row, attempt_column] in attempts:
         print("\n", "You already shot there", "\n")
         return "error"
     
-    return [attempt_row, attempt_column]
+    return attempt_row, attempt_column
 
 
 def main():
+    # Print instructions
     print("Welcome to the Battleship Game!")
     print("How to play?")
     print("You need to guess where the battleships are in the board")
@@ -101,28 +108,32 @@ def main():
     print("Have a Good battle and bring the victory home, Good Luck!") 
 
     
+    # Run game until user wants to stop
     while True:
         turn = 0
         board = create_matrix(8,8)
         ships_found = 0
         attempts = []
-    
+        
+        # Run each game for 10 turns    
         while turn < 10:
             print("\n", f"TURN {turn + 1}", "\n")
             display_board(board)
             next_attempt = get_input(attempts)
             
+            # If there is an error, restart turn
             if next_attempt == "error":
                 continue
             
-            attempt_row = next_attempt[0]
-            attempt_column = next_attempt[1]
+            # When there isn't an error, the function returns the position as a tuple
+            attempt_row,attempt_column = next_attempt
     
+            # If there isn't a ship, change the number in the matrix from 0 to 2
             if board[attempt_row - 1][attempt_column - 1] == 0:
                 print("You missed!")
                 board[attempt_row - 1][attempt_column - 1] = 2
     
-            
+            # If there is a ship, change the number in the matrix from 1 to 3
             if board[attempt_row - 1][attempt_column - 1] == 1:
                 print("You hit a ship!")
                 board[attempt_row - 1][attempt_column - 1] = 3
