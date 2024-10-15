@@ -92,6 +92,15 @@ def get_input(attempts):
 
 
 def main():
+    print("Welcome to the Battleship Game!")
+    print("How to play?")
+    print("You need to guess where the battleships are in the board")
+    print("First choose the row, then the column.")
+    print("You have 10 turns to guess where the battleships are.")
+    print("If you don't guess where all the battleships are, you lose.")
+    print("Have a Good battle and bring the victory home, Good Luck!") 
+
+    
     while True:
         turn = 0
         board = create_matrix(8,8)
